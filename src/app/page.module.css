@@ -1,10 +1,26 @@
-.page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
+:root {
+  --gray-light: 0, 0, 0;
+  --gray-dark: 255, 255, 255;
+  --gray-alpha-100-light: rgba(var(--gray-light), 0.05);
+  --gray-alpha-200-light: rgba(var(--gray-light), 0.08);
+  --gray-alpha-100-dark: rgba(var(--gray-dark), 0.06);
+  --gray-alpha-200-dark: rgba(var(--gray-dark), 0.145);
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
+  --button-primary-hover-light: #383838;
+  --button-secondary-hover-light: #f2f2f2;
+  --button-primary-hover-dark: #ccc;
+  --button-secondary-hover-dark: #1a1a1a;
+
+  --font-primary: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+.page {
+  --gray-rgb: var(--gray-light);
+  --gray-alpha-100: var(--gray-alpha-100-light);
+  --gray-alpha-200: var(--gray-alpha-200-light);
+  --button-primary-hover: var(--button-primary-hover-light);
+  --button-secondary-hover: var(--button-secondary-hover-light);
 
   display: grid;
   grid-template-rows: 20px 1fr 20px;
@@ -13,17 +29,16 @@
   min-height: 100svh;
   padding: 80px;
   gap: 64px;
-  font-family: var(--font-geist-sans);
+  font-family: var(--font-primary);
 }
 
 @media (prefers-color-scheme: dark) {
   .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
+    --gray-rgb: var(--gray-dark);
+    --gray-alpha-100: var(--gray-alpha-100-dark);
+    --gray-alpha-200: var(--gray-alpha-200-dark);
+    --button-primary-hover: var(--button-primary-hover-dark);
+    --button-secondary-hover: var(--button-secondary-hover-dark);
   }
 }
 
@@ -35,7 +50,7 @@
 }
 
 .main ol {
-  font-family: var(--font-geist-mono);
+  font-family: var(--font-mono);
   padding-left: 0;
   margin: 0;
   font-size: 14px;
@@ -66,18 +81,13 @@
   border-radius: 128px;
   height: 48px;
   padding: 0 20px;
-  border: none;
   border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  line-height: 20px;
   font-weight: 500;
 }
 
@@ -108,7 +118,6 @@ a.secondary {
   flex-shrink: 0;
 }
 
-/* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   a.primary:hover {
     background: var(--button-primary-hover);
@@ -128,8 +137,7 @@ a.secondary {
 
 @media (max-width: 600px) {
   .page {
-    padding: 32px;
-    padding-bottom: 80px;
+    padding: 32px 32px 80px;
   }
 
   .main {

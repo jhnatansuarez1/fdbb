@@ -1,95 +1,61 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+import React, { useState, useEffect } from 'react'
+import './styles.css' // Importando los estilos CSS
+import Image from 'next/image'
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+export default function BreakingBadQuotes() {
+ const [quote, setQuote] = useState(null)
+ const [loading, setLoading] = useState(false)
+ const [error, setError] = useState(null)
+
+ useEffect(() => {
+  obtenerFrase()
+ }, [])
+
+ const obtenerFrase = async () => {
+  setLoading(true)
+  setError(null)
+  try {
+   const res = await fetch('https://api.breakingbadquotes.xyz/v1/quotes')
+   if (!res.ok) {
+    throw new Error('Error al obtener la frase')
+   }
+   const data = await res.json()
+   setQuote(data[0])
+  } catch (err) {
+   setError(err.message)
+  } finally {
+   setLoading(false)
+  }
+ }
+
+ return (
+  <div className='container'>
+   <Image
+    src='/public/logo.svg' // Agrega un icono en la carpeta public/
+    alt='Breaking Bad'
+    width={100}
+    height={100}
+    className='icon'
+   />
+
+   <h1 className='title'>📺 Frases de Breaking Bad</h1>
+   {loading ? (
+    <p className='loading'>⏳ Cargando...</p>
+   ) : error ? (
+    <p className='error'>❌ {error}</p>
+   ) : (
+    quote && (
+     <div className='frase-container'>
+      <p className='frase-text'>&quot;{quote.quote}&quot;</p>
+      <p className='frase-author'>- {quote.author}</p>
+     </div>
+    )
+   )}
+   <button onClick={obtenerFrase} className='button' disabled={loading}>
+    🔄 Nueva Frase
+   </button>
+  </div>
+ )
 }
